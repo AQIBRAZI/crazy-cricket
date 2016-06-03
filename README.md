@@ -1,11 +1,15 @@
 # Background
-The \<team\> is building out our engineering presence in Gurgoan, and we are seeking exceptional candidates to fill several rolls on our team. We believe that the successful candidate will have a high degree of technical aptitude, a *creative* problem solver, and most of all engaged. We have created this test in order to let candidate show us how excited they are about the kinds of technical challenges we face, and also to give them the opporunity to show their technical skill and creative problem solving.
+The Aladdin Product Service team is building out our engineering presence in Gurgoan, and we are seeking exceptional candidates to fill several rolls on our team. We are looking for engineers who have a high degree of technical aptitude, who are creative problem solvers, and who, most of all, are passionate. We have created this test to let you show us how excited you are about the kinds of technical challenges we face, and to give you an opportunity to show-case your technical skill and creative problem solving.  
 
 A few things to bear in mind if you take on this test:
-   1. We have **no expectation** that you are familiar with all of the tools and technologies used here (Java, Kafka, Protocol Buffers, and then whatever you choose to use in your solution). Indeed part of the test is to see how candidates handle an unfamiliar problem with an unfamiliar toolchain. Expect to use Google a lot, you **will not** find the answers to these problems in textbooks, and it will certainly require a combination of technical know-how, reading/**understanding** documentation,  creativitiy, and determination to complete. That's exactly the point, those are the attributes we are looking for in a successful candidate.    
-   2. It is intentionally a lot of work, and we expect that anyone who completes has put themselves in an excellent position to recieve an offer, provided we are convinced they have done the work. The in person technical interview will mainly explore questions about design and algorithms and come out of your solution.   
-   3. We are very much interested in the decisions **you* *make. We are no interested in telling people what to do, we want to hire people that can synthesize business problems into slick technical solutions that create business value without the need to micro-manage and dictate projects. We want to know the kind of decisions you make, and the kind of work you do, when given an open ended problem with intentionally few requirements.
-   4. The few requirements, read Protocol Buffers from Kafka and server data over HTTP as JSON via a REST API, are hard requirements. Indeed, doing those things successfully exactly as specified are the only requirements.
+   1. **We do not expect that you have familiarity with all of the tools and technologies used in this test (Java, Kafka, Protocol Buffers, etc.).**  Part of the test is to see how you tackle an unfamiliar problem with an unfamiliar toolchain.  Completing the test will require a combination of technical know-how, the ability to find and leverage useful resources and documentation (expect to use Google a lot!), and a great deal of creativity and the determination to follow through. We believe these are the primary attributes that will make for a successful team member!  
+   2. **Completing the test will take a lot of work.**  As a result, it gives us much of the information we need to know about you as a candidate.  Successfully completing the test will put you in an excellent position to move forward with the process. Subsequent interviews will focus largely on the process and approach taken during the test, as well as the design and result of your solution.  
+   3. **There isn’t a single right answer, and aren’t many structured requirements.**  We are very much interested in how you approach and solve this problem.  Our team needs engineers who can synthesize business problems into slick technical solutions that create business value without prescriptive oversight.  This test will help us understand the kind of decisions you make and the kind of work you do, when given an open ended problem  with intentionally few requirements.
+   4. But, there are a few requirements.   The few requirements outlined in more detail below are hard requirements.   Doing these things exactly as specified are the only hard requirements.
+    * Read Protocol Buffers from Kafka, though we give you the Protocol Buffer definitions and generated Java files  
+    * Read server data over HTTP as JSON via a REST API are hard requirements  
+
+A final note on academic honesty, as clearly this is not a supervised test. It's certainly fine to ask people you know questions, indeed that's part of any engineer's day to day, but we cannot overemphasize that we expect you to be able to discuss any and all aspects of your solution, and if it is not your own work then that will become apparent very quickly in the interview process.  
 
 Enough preamble, let's jump into the detail...
 
@@ -42,7 +46,24 @@ There are **no** other requirements! You can use whatever technology/language yo
 
 Also JSON should be formatted as `{[name_1,value_1],...,[name_k,value_k]}`
 
-My shell script, `bin/setup.sh <kafka home>`, will configure a local Kafka cluster with some preloaded messages that you can use to test your code, provided you have the Kafka distribution properly unpacked in whatever directory you pass in as an argument.
+There is a class in the repo called `com.bfm.acs.crazycricket.SampleDataProducer`. Once you have a Kafka broker up and running you can run something like this:  
+```shell
+oscar > cd crazy-cricket
+oscar/crazy-cricket > sbt build
+oscar/crazy-cricket > java -cp CrazyCricket-ASSEMBLY.jar com.bfm.acs.crazycricket.SampleDataProducer --kafka-broker <host:port>
+```
+This will populate your Kafka topics with a few sample messages that you might want to use for testing.
+
+## Submission
+Your submission should either be a Github repository on your personal Github page, or an archive that you submit to your HR contact. A few requirements:  
+   1. There **must** me an executable in bin, called `run.sh`, i.e. `bin/run.sh`. You can put whatever build/run steps you like in there, but that script must fire up all your services (REST API, Kafka consumer, database, depending on what pieces you use to attack the problem)
+   2. This shell script must take as an argument the Kafka broker location
+   3. The script should print out the location at which the REST API is accpeting HTTP requests so I can hook the tests into your REST service
+
+## Gotchas  
+There are a few pretty easy mistakes make and things that you can get confused by:  
+   1. Beware starting up Kafka, it requires a Zookeeper instance. Make sure you read the "Quickstart" section of the docs carefully, as it can be a little tricky.
+   2. When you've populated a few messages in Kafka, if you want to start a program and read them off, you need to explicitly configure Kafka to read from the beginning of the topic. By default the consumer reads only new messages. I lost a few hours writing this test on that one...  
 
 ## Grading Rubric
 First and foremost, this is a design test. Given a set of constraints on input and output we are interested in the details of your implementation when you make all the decisions yourself. More specifically we will be looking at:  
@@ -51,4 +72,4 @@ First and foremost, this is a design test. Given a set of constraints on input a
    3. Design decisions: this essentially a design test, in the sense that it is really asking you to design a system for   capturing and presenting data via a specified interface. We are most interested not in which technologies you chose, but in **why** you chose them, and if the way that you used them demonstrated a clear understanding of that technology.
 
 ## Final Words
-Good luck, and please feel free to post questions in the "Issues" section!
+Good luck, and please feel free to post questions in the "Issues" section! We are very excited to see what you come up with!
