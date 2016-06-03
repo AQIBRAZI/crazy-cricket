@@ -1,7 +1,6 @@
 package com.bfm.acs.crazycricket
 
 import Constants._
-import java.io.File
 import org.apache.kafka.clients.producer.KafkaProducer
 import scopt.OptionParser
 import TestData._
