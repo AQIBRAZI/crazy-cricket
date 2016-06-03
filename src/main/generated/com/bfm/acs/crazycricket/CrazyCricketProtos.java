@@ -46,6 +46,15 @@ public final class CrazyCricketProtos {
      * <code>required .Game.GameType type = 3;</code>
      */
     com.bfm.acs.crazycricket.CrazyCricketProtos.Game.GameType getType();
+
+    /**
+     * <code>required int64 gameDate = 4;</code>
+     */
+    boolean hasGameDate();
+    /**
+     * <code>required int64 gameDate = 4;</code>
+     */
+    long getGameDate();
   }
   /**
    * Protobuf type {@code Game}
@@ -134,6 +143,11 @@ public final class CrazyCricketProtos {
                 bitField0_ |= 0x00000004;
                 type_ = value;
               }
+              break;
+            }
+            case 32: {
+              bitField0_ |= 0x00000008;
+              gameDate_ = input.readInt64();
               break;
             }
           }
@@ -333,10 +347,26 @@ public final class CrazyCricketProtos {
       return type_;
     }
 
+    public static final int GAMEDATE_FIELD_NUMBER = 4;
+    private long gameDate_;
+    /**
+     * <code>required int64 gameDate = 4;</code>
+     */
+    public boolean hasGameDate() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>required int64 gameDate = 4;</code>
+     */
+    public long getGameDate() {
+      return gameDate_;
+    }
+
     private void initFields() {
       winner_ = com.bfm.acs.crazycricket.CrazyCricketProtos.Player.getDefaultInstance();
       loser_ = com.bfm.acs.crazycricket.CrazyCricketProtos.Player.getDefaultInstance();
       type_ = com.bfm.acs.crazycricket.CrazyCricketProtos.Game.GameType.TEST;
+      gameDate_ = 0L;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -353,6 +383,10 @@ public final class CrazyCricketProtos {
         return false;
       }
       if (!hasType()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasGameDate()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -380,6 +414,9 @@ public final class CrazyCricketProtos {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeEnum(3, type_.getNumber());
       }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeInt64(4, gameDate_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -400,6 +437,10 @@ public final class CrazyCricketProtos {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(3, type_.getNumber());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(4, gameDate_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -534,6 +575,8 @@ public final class CrazyCricketProtos {
         bitField0_ = (bitField0_ & ~0x00000002);
         type_ = com.bfm.acs.crazycricket.CrazyCricketProtos.Game.GameType.TEST;
         bitField0_ = (bitField0_ & ~0x00000004);
+        gameDate_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
 
@@ -582,6 +625,10 @@ public final class CrazyCricketProtos {
           to_bitField0_ |= 0x00000004;
         }
         result.type_ = type_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.gameDate_ = gameDate_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -607,6 +654,9 @@ public final class CrazyCricketProtos {
         if (other.hasType()) {
           setType(other.getType());
         }
+        if (other.hasGameDate()) {
+          setGameDate(other.getGameDate());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -621,6 +671,10 @@ public final class CrazyCricketProtos {
           return false;
         }
         if (!hasType()) {
+          
+          return false;
+        }
+        if (!hasGameDate()) {
           
           return false;
         }
@@ -917,6 +971,38 @@ public final class CrazyCricketProtos {
       public Builder clearType() {
         bitField0_ = (bitField0_ & ~0x00000004);
         type_ = com.bfm.acs.crazycricket.CrazyCricketProtos.Game.GameType.TEST;
+        onChanged();
+        return this;
+      }
+
+      private long gameDate_ ;
+      /**
+       * <code>required int64 gameDate = 4;</code>
+       */
+      public boolean hasGameDate() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>required int64 gameDate = 4;</code>
+       */
+      public long getGameDate() {
+        return gameDate_;
+      }
+      /**
+       * <code>required int64 gameDate = 4;</code>
+       */
+      public Builder setGameDate(long value) {
+        bitField0_ |= 0x00000008;
+        gameDate_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int64 gameDate = 4;</code>
+       */
+      public Builder clearGameDate() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        gameDate_ = 0L;
         onChanged();
         return this;
       }
@@ -1600,13 +1686,14 @@ public final class CrazyCricketProtos {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\030CrazyCricketProtos.proto\"\234\001\n\004Game\022\027\n\006w" +
+      "\n\030CrazyCricketProtos.proto\"\256\001\n\004Game\022\027\n\006w" +
       "inner\030\001 \002(\0132\007.Player\022\026\n\005loser\030\002 \002(\0132\007.Pl" +
-      "ayer\022\034\n\004type\030\003 \002(\0162\016.Game.GameType\"E\n\010Ga" +
-      "meType\022\010\n\004TEST\020\000\022\021\n\rLIMITED_OVERS\020\001\022\021\n\rT" +
-      "WENTY_TWENTY\020\002\022\t\n\005OTHER\020\003\")\n\006Player\022\016\n\006u" +
-      "serId\030\001 \002(\t\022\017\n\007country\030\002 \002(\tB.\n\030com.bfm." +
-      "acs.crazycricketB\022CrazyCricketProtos"
+      "ayer\022\034\n\004type\030\003 \002(\0162\016.Game.GameType\022\020\n\010ga" +
+      "meDate\030\004 \002(\003\"E\n\010GameType\022\010\n\004TEST\020\000\022\021\n\rLI" +
+      "MITED_OVERS\020\001\022\021\n\rTWENTY_TWENTY\020\002\022\t\n\005OTHE" +
+      "R\020\003\")\n\006Player\022\016\n\006userId\030\001 \002(\t\022\017\n\007country" +
+      "\030\002 \002(\tB.\n\030com.bfm.acs.crazycricketB\022Craz" +
+      "yCricketProtos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -1625,7 +1712,7 @@ public final class CrazyCricketProtos {
     internal_static_Game_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_Game_descriptor,
-        new java.lang.String[] { "Winner", "Loser", "Type", });
+        new java.lang.String[] { "Winner", "Loser", "Type", "GameDate", });
     internal_static_Player_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_Player_fieldAccessorTable = new

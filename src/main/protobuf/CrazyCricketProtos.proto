@@ -12,6 +12,7 @@ message Game {
     required Player winner = 1;
     required Player loser = 2;
     required GameType type = 3;
+    required int64 gameDate = 4;
 
 }
 

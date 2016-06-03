@@ -1,18 +1,20 @@
 package com.bfm.acs.crazycricket
 
 import java.util.Properties
+import org.apache.kafka.clients.producer.{ProducerRecord, KafkaProducer}
+
 /**
   * Created by Oscar on 5/19/16.
   */
-case class KafkaProps(brokerAddr: String) {
-  import KafkaConstants._
+case class KafkaHelper(brokerAddr: String) {
+  import KafkaHelper._
   private val props = new Properties()
   props.put("bootstrap.servers", brokerAddr)
   props.put("acks", "all")
-  props.put("retries", 0.toString)
-  props.put("batch.size", 16384.toString)
-  props.put("linger.ms", 1.toString)
-  props.put("buffer.memory", 33554432.toString)
+  props.put("retries", "0")
+  props.put("batch.size", "16384")
+  props.put("linger.ms", "1")
+  props.put("buffer.memory", "33554432")
 
   lazy val producerProps = {
     props.put("key.serializer", KEY_SERIALIZER)
@@ -30,9 +32,20 @@ case class KafkaProps(brokerAddr: String) {
   }
 }
 
-object KafkaConstants {
+object KafkaHelper {
   val KEY_SERIALIZER = "org.apache.kafka.common.serialization.StringSerializer"
   val VAL_SERIALIZER = "org.apache.kafka.common.serialization.ByteArraySerializer"
   val KEY_DESERIALIZER = "org.apache.kafka.common.serialization.StringDeserializer"
   val VAL_DESERIALIZER = "org.apache.kafka.common.serialization.ByteArrayDeserializer"
+
+  def pushToKafka(topic: String,data: Seq[Array[Byte]],producer: KafkaProducer[String,Array[Byte]]) = {
+    println(s"Pushing ${data.length} messages to topic $topic")
+    data
+      .zipWithIndex
+      .foreach{
+        case (bytes,index) => {
+          producer.send(new ProducerRecord[String,Array[Byte]](topic,index.toString,bytes))
+        }
+      }
+  }
 }
