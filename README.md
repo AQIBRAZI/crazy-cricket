@@ -22,8 +22,23 @@ The goal here is to create a REST API that serves aggregated metrics created fro
 ## Setup and submission requirements  
 1. Linux (or Windows with Cygwin): you will need to be able to execute .sh scripts to run Kafka and the project locally. I recommend doing this on a VM using Virtual Box, though as long as you can run Kafka you are all set!
 2. a distribution of Kafka: download the distribution [here](http://kafka.apache.org/downloads.html), and unpack it
-3. sbt, or Simple Build Tool: in order to run the tests and get access to the Java protocol buffer defintions, you need to download and compile the project. Typesafe provide binary distributions of sbt [here](http://www.scala-sbt.org/0.13/docs/Setup.html), and it is very easy to install.
-4. Clone this repo: `git clone... <your dir>; cd <your dir>; sbt`, which should clone the project into `<your dir>`, and fire up sbt, which will compile and build the project.
+3. sbt, or Simple Build Tool (honestly, it's not remotely simple): in order to run the tests and get access to the Java protocol buffer defintions, you need to download and compile the project. Typesafe provide binary distributions of sbt [here](http://www.scala-sbt.org/0.13/docs/Setup.html), and it is very easy to install (Windows, Mac, Linux).
+4. Clone this repo: `git clone... <your dir>; cd <your dir>; sbt`, which should clone the project into `<your dir>`, and fire up sbt, then use `run` to run the main classes, providing the requird arguments. For example, below will run the tests if your Kafka broker is running at localhost:9092, and your REST API at localhost:8080:
+```
+oscar > cd crazy-cricket
+oscar > sbt
+> run --kafka-broker localhost:9092
+[info] Compiling 1 Scala source to /Users/Oscar/Work/crazy-cricket/target/scala-2.11/classes...
+[warn] Multiple main classes detected.  Run 'show discoveredMainClasses' to see the list
+
+Multiple main classes detected, select one to run:
+
+ [1] com.bfm.acs.crazycricket.ResultsTester
+ [2] com.bfm.acs.crazycricket.SampleDataProducer
+ [3] com.bfm.acs.crazycricket.DummyServer
+> 1
+...
+```
 5. Create a project of your own with a solution: there is only one requirement, that the project contians a directory called bin, and a shell script `bin/run.sh <kafka host:port>` which starts your REST API and any other components (databases, Kafka consumers, etc), and connects to the Kafka broker specified as an argument.
 
 ## Task
@@ -70,6 +85,12 @@ First and foremost, this is a design test. Given a set of constraints on input a
    1. Unit tests: we would like to see unit tests  
    2. Coding style: clear and concise code is always preferred  
    3. Design decisions: this essentially a design test, in the sense that it is really asking you to design a system for   capturing and presenting data via a specified interface. We are most interested not in which technologies you chose, but in **why** you chose them, and if the way that you used them demonstrated a clear understanding of that technology.
+
+## Bonus  
+There are some bonus points available for the following:    
+   1. Catching cheaters: how could our backend ensure hackers can't artificially inflate scores?  
+   2. Duplicate games: how many games can someone play at once?!  
+These kinds of questions come up regularly in data engineering, so it would be great to see some thoughtful solutions.  
 
 ## Final Words
 Good luck, and please feel free to post questions in the "Issues" section! We are very excited to see what you come up with!

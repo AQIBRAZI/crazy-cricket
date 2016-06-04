@@ -17,7 +17,7 @@ object DummyServer extends App with SimpleRoutingApp {
 
   startServer("localhost",port = 8080) {
     complete(
-      """{ "values": [["oscar",2],["somebody",1]]}"""
+      """{ "values": [["oscar",2],["dummy",0]]}"""
     )
   }
 }

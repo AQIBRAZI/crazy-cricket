@@ -57,7 +57,7 @@ object ResultsTester {
     */
   def printFailure(title: String, res: String) = {
     println(Console.RED + title)
-    print(Console.RED + s" - $res")
+    println(Console.RED + s" - $res")
   }
 
   /**
@@ -67,7 +67,7 @@ object ResultsTester {
     */
   def printSuccess(title: String, res: String) = {
     println(Console.GREEN + title)
-    print(Console.GREEN + s" - $res")
+    println(Console.GREEN + s" - $res")
   }
 
   /**
@@ -84,7 +84,7 @@ object ResultsTester {
       .body
     println(s"Response is $response")
     response
-      .toJson
+      .parseJson
       .convertTo[LeaderBoard]
   }
 
@@ -149,6 +149,12 @@ object ResultsTester {
       requiredLeaderBoard
     )
 
+  /**
+    * Runner
+    * @param parser arg parser
+    * @param args command line args
+    * @return true if config is parsed from args, false otherwise
+    */
   def run(parser: OptionParser[ResultsTesterOptParserConfig],args: Array[String]) = {
     parser.parse(args.toSeq,ResultsTesterOptParserConfig()) match {
       case Some(config) => {
@@ -226,9 +232,66 @@ object ResultsTester {
           )
         testNatLeaderboard(hostname,secondDateNatLeaderBoard)
 
-        // Add some data parameters to our query
+        // Add some date parameters to our query
         testLeaderboard(hostname,firstDateLeaderBoard,firstGameDate.minusDays(1),secondGameDate.minusDays(1))
         testNatLeaderboard(hostname,firstDateNatLeaderBoard,firstGameDate.minusDays(1),secondGameDate.minusDays(1))
+
+        // Add some games to the 20/20 topic
+        val twentyTwentyGames =
+          Seq(
+            GameWrapper(oscar.getProto,sachin.getProto,firstGameDateTS,TWENTY_TWENTY),
+            GameWrapper(shubham.getProto,oscar.getProto,secondGameDateTS,TWENTY_TWENTY),
+            GameWrapper(imran.getProto,andrew.getProto,firstGameDateTS,TWENTY_TWENTY),
+            GameWrapper(andrew.getProto,sachin.getProto,secondGameDateTS,TWENTY_TWENTY),
+            GameWrapper(shubham.getProto,imran.getProto,thirdGameDateTS,TWENTY_TWENTY),
+            GameWrapper(oscar.getProto,andrew.getProto,thirdGameDateTS,TWENTY_TWENTY)
+          )
+        pushToKafka(TWENTY_TWENTY,twentyTwentyGames.map(_.getProto.toByteArray),producer)
+
+        val newAllTimeLeaderBoard =
+          LeaderBoard(
+            List(
+              (imran.userId,4),
+              (oscar.userId,4),
+              (shubham.userId,2),
+              (andrew.userId,1),
+              (sachin.userId,1)
+            )
+          )
+
+        val newAllTimeNatLeaderBoard =
+          LeaderBoard(
+            List(
+              (ENGLAND,4),
+              (PAKISTAN,4),
+              (INDIA,3),
+              (USA,1)
+            )
+          )
+
+        // Test the all time leaderboards
+        testLeaderboard(hostname,newAllTimeLeaderBoard)
+        testNatLeaderboard(hostname,newAllTimeNatLeaderBoard)
+
+        val thirdDateLeaderBoard =
+          LeaderBoard(
+            List(
+              (oscar.userId,1),
+              (shubham.userId,1)
+            )
+          )
+
+        val thirdDateNatLeaderBoard =
+          LeaderBoard(
+            List(
+              (ENGLAND,1),
+              (INDIA,1)
+            )
+          )
+
+        // Add some data parameters
+        testLeaderboard(hostname,thirdDateLeaderBoard,thirdGameDate.minusDays(1),thirdGameDate.plusDays(2))
+        testLeaderboard(hostname,thirdDateNatLeaderBoard,thirdGameDate.minusDays(1),thirdGameDate.plusDays(2))
 
         true
       }
@@ -236,6 +299,10 @@ object ResultsTester {
     }
   }
 
+  /**
+    * Main method
+    * @param args command line args
+    */
   def main(args: Array[String]) = {
     run(parser.getParser(appName),args)
     ()
